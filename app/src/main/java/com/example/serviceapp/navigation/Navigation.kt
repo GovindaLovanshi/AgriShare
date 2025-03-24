@@ -47,5 +47,9 @@ fun Navigation(){
 
             LabourJobScreen()
         }
+        composable<Routes.LabourJobScreen> {
+
+            LabourJobScreen()
+        }
     }
 }
