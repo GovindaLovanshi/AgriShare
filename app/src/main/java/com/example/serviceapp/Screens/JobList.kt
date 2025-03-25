@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.serviceapp.Models.JobModel
+import com.example.serviceapp.R
 
 
 @Composable
@@ -45,27 +47,43 @@ fun JobList(
         Spacer(modifier = Modifier.height(12.dp))
 
 
-        Column {
-
-          Row(modifier = Modifier.fillMaxWidth(),
-              horizontalArrangement = Arrangement.SpaceBetween){
-
-
-              Text(text = JobModel.jobName, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-              Text(text = JobModel.location, color = Color.Black)
-
-          }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween){
-
-
-                Text(text = JobModel.description, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Text(text = JobModel.date, color = Color.Black)
-
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(start = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = JobModel.jobName,
+                color = Color.Black,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(painter = painterResource(R.drawable.location), contentDescription = null)
+                Text(
+                    text = JobModel.jobName,
+                    color = Color.Black,
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
             }
+            Text(
+                text = JobModel.jobName,
+                color = Color.Black,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1
+            )
+            Text(
+                text = "Hours: ${JobModel.date}",
+                color = Color.Black,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1
+            )
         }
     }
 

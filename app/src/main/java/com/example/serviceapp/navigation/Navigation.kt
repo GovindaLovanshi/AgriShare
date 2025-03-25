@@ -40,7 +40,7 @@ fun Navigation(){
 
         composable<Routes.HomeScreen> {
 
-            HomeScreen()
+            HomeScreen(navController)
         }
 
         composable<Routes.LabourJobScreen> {
