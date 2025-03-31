@@ -1,4 +1,4 @@
-package com.example.serviceapp.Utilites
+package com.example.serviceapp.Equipment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,7 +36,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.tractor), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -55,7 +55,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.road), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -74,7 +74,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.tractor), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -93,7 +93,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.road), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -121,7 +121,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.tractor), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -140,7 +140,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.road), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -159,7 +159,7 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.tractor), contentDescription = null,
                 Modifier
                     .padding(top = 8.dp, bottom = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -178,9 +178,9 @@ fun Equipment(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.location), contentDescription = null,
+                painter = painterResource(id = R.drawable.road), contentDescription = null,
                 Modifier
-                    .padding(top = 8.dp, bottom = 4.dp)
+                    .padding(top = 8.dp, bottom = 4.dp, start = 4.dp, end = 4.dp)
                     .background(color = Color.White, shape = RoundedCornerShape(10.dp))
                     .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp)
             )

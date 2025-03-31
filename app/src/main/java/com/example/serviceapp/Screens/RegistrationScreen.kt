@@ -3,7 +3,6 @@ package com.example.serviceapp.Screens
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
-import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -51,12 +50,12 @@ import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
 import com.example.serviceapp.viewmodel.AuthState
 import com.example.serviceapp.viewmodel.MobileAuthViewModel
-import com.google.rpc.context.AttributeContext.Auth
-import kotlin.math.exp
+
+
 
 @SuppressLint("ContextCastToActivity")
 @Composable
-fun RegistrationScreen(navController: NavHostController,phoneAuthViewModel: MobileAuthViewModel){
+fun RegistrationScreen(navController: NavHostController,phoneAuthViewModel: MobileAuthViewModel ){
 
     val authState by phoneAuthViewModel.authState.collectAsState()
     val context = LocalContext.current

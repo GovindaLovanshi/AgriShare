@@ -18,5 +18,17 @@ sealed class Routes {
     data object LabourJobScreen:Routes()
 
     @Serializable
+    data object Market:Routes()
+
+    @Serializable
     data object RegistrationScreen:Routes()
+
+    @Serializable
+    data object Profile:Routes()
+
+    @Serializable
+    data object JobForm:Routes()
+
+    @Serializable
+    data object TopBar:Routes()
 }

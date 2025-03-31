@@ -1,21 +1,24 @@
-package com.example.serviceapp.Models
+package com.example.serviceapp.Equipment.Model
 
 import java.io.Serializable
 
 data class EquipmentModel(
     var title:String="",
     var description:String="",
-    var picUrl:ArrayList<String> =ArrayList(),
-    var size:ArrayList<String> =ArrayList(),
     var price:Double=0.0,
-    var rating:Double=0.0,
+    var name:String = "",
     var numberIn:Int=0,
-    var showRecommended:Boolean=false,
-    var categoryId:String="",
-    var sellerName:String="",
+    var ownerName:String="",
     var sellerPic:String="",
-    var sellerTell:Int=0
+    var quantity:Int=0,
+    var phoneNumber:String = ""
 ):Serializable
 
 // title, rent pr hour, uniqueid, description, img, owner name, address to pick,available qunatity,
 // phone number
+
+data class CategoryModel(
+    var Id: Int = 0,
+    var ImagePath: String = "",
+    var Name: String = ""
+)
