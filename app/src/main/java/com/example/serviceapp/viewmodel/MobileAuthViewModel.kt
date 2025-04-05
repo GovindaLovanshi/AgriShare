@@ -24,13 +24,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-@HiltViewModel
-class MobileAuthViewModel @Inject constructor(
-    private val firebaseAuth:FirebaseAuth,
-    private  val database:FirebaseDatabase
-) :ViewModel() {
 
+class MobileAuthViewModel :ViewModel() {
 
+    private val firebaseAuth = FirebaseAuth.getInstance()
+
+    private  val database = FirebaseDatabase.getInstance()
 
     private  val _authState = MutableStateFlow<AuthState>(AuthState.Ideal)
      val authState = _authState.asStateFlow()

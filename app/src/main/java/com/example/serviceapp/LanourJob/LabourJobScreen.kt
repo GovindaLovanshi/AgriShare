@@ -172,8 +172,12 @@ fun JobList(
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 8.dp),
+                .padding(start = 8.dp)
+                .clickable {
+
+                },
             verticalArrangement = Arrangement.spacedBy(8.dp)
+
         ) {
             Text(
                 text = JobModel.jobName,

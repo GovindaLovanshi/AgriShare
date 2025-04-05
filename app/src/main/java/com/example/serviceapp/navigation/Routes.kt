@@ -31,4 +31,7 @@ sealed class Routes {
 
     @Serializable
     data object TopBar:Routes()
+
+//    @Serializable
+//    data object JobList:Routes()
 }

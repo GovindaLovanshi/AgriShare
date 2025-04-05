@@ -1,7 +1,13 @@
-package com.example.serviceapp.Forms
+package com.example.serviceapp.LanourJob
 
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +23,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,23 +34,53 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.serviceapp.LanourJob.JobViewModel.jobviewmodel
+import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
+import com.example.serviceapp.navigation.Routes
 
 @Preview
 @Composable
 fun JobForm() {
 
-    var text by remember { mutableStateOf("") }
-    var endDate by rememberSaveable { mutableLongStateOf(0L) }
-    var showDatePicker by remember { mutableStateOf(false) }
+    val JobViewModel: jobviewmodel = viewModel()
+
+
+    var title by remember { mutableStateOf("") }
+    var call by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var date by remember { mutableStateOf("") }
+    var loading by remember { mutableStateOf(false) }
+
+    var userList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
+
+    val context = LocalContext.current
+    val imageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        imageUri = uri
+    }
+
+    // Fetch user data
+    LaunchedEffect(true) {
+        JobViewModel.fetchUserData(
+            onSuccess = { users ->
+                userList = users
+            },
+            onFailure = { exception ->
+                Log.e("UserForm", "Error fetching user data: $exception")
+            }
+        )
+    }
 
     Column (
         modifier = Modifier
@@ -72,6 +109,9 @@ fun JobForm() {
             contentDescription = null,
             modifier = Modifier.width(50.dp).height(50.dp)
                 .clip(CircleShape)
+                .clickable {
+                    imageLauncher.launch("image/*")
+                }
             , contentScale = ContentScale.Crop
         )
 
@@ -79,8 +119,8 @@ fun JobForm() {
 
         TextField(
             modifier = Modifier.width(350.dp),
-            value = text,
-            onValueChange = {text = it},
+            value = title,
+            onValueChange = {title = it},
             placeholder = { Text(text = "Name OF Job") }
 
         )
@@ -92,8 +132,8 @@ fun JobForm() {
 
             TextField(
                 modifier = Modifier.width(170.dp),
-                value = text,
-                onValueChange = { text = it },
+                value = call,
+                onValueChange = { call = it },
                 placeholder = { Text(text = "Age") }
 
             )
@@ -102,8 +142,8 @@ fun JobForm() {
 
             TextField(
                 modifier = Modifier.width(170.dp),
-                value = text,
-                onValueChange = { text = it },
+                value = address,
+                onValueChange = { address = it },
                 placeholder = { Text(text = "Salary") }
 
             )
@@ -112,25 +152,25 @@ fun JobForm() {
 
         }
         Spacer(modifier = Modifier.padding(20.dp))
-
         Row (horizontalArrangement = Arrangement.spacedBy(8.dp)){
 
 
             TextField(
                 modifier = Modifier.width(170.dp),
-                value = text,
-                onValueChange = { text = it },
-                placeholder = { Text(text = "Address") }
+                value = call,
+                onValueChange = { call = it },
+                placeholder = { Text(text = "Age") }
 
             )
+            Spacer(modifier = Modifier.padding(20.dp))
 
             Spacer(modifier = Modifier.padding())
 
             TextField(
                 modifier = Modifier.width(170.dp),
-                value = text,
-                onValueChange = { text = it },
-                placeholder = { Text(text = "Date") }
+                value = address,
+                onValueChange = { address = it },
+                placeholder = { Text(text = "Salary") }
 
             )
 
@@ -138,14 +178,16 @@ fun JobForm() {
 
         }
 
+
+
         Spacer(modifier = Modifier.padding(20.dp))
 
 
 
         TextField(
             modifier = Modifier.width(350.dp),
-            value = text,
-            onValueChange = {text = it},
+            value = date,
+            onValueChange = {date = it},
             placeholder = { Text(text = "Mobile Number") }
 
         )
@@ -156,19 +198,48 @@ fun JobForm() {
         TextField(
             modifier = Modifier.width(350.dp)
                 .height(150.dp),
-            value = text,
-            onValueChange = {text = it},
+            value = description,
+            onValueChange = {description = it},
             placeholder = { Text(text = "Description") },
 
 
-        )
+            )
 
 
         Spacer(modifier = Modifier.padding(40.dp))
 
         Button(
             modifier = Modifier.width(250.dp),
-            onClick = { /* TODO: Implement click action */ },
+            onClick = {
+
+                if (title.isNotEmpty() && call.isNotEmpty() && address.isNotEmpty() && description.isNotEmpty() && imageUri != null && date.isNotEmpty()) {
+                    loading = true
+                    JobViewModel.uploadImage(
+                        imageUri!!,
+                        onSuccess = {}
+                    ) { imageUrl ->
+                        val formData = jobdetailsmodel(
+                            title = title,
+                            call = call,
+                            address = address,
+                            description = description,
+                            imageUrl = imageUrl.toString(),
+                            date = date
+                        )
+                        JobViewModel.uploadFormData(formData, {
+                            loading = false
+                            Toast.makeText(context, "Data uploaded successfully", Toast.LENGTH_SHORT).show()
+                        }, { exception ->
+                            loading = false
+                            Toast.makeText(context, "Upload failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        })
+                    }
+                } else {
+                    Toast.makeText(context, "Please fill in all fields and select an image", Toast.LENGTH_SHORT).show()
+                }
+
+
+            },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(Color.Blue)
         ) {
@@ -182,3 +253,4 @@ fun JobForm() {
 
     }
 }
+

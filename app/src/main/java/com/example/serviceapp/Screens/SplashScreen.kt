@@ -53,7 +53,7 @@ fun SplashScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.white))
+            .background(colorResource(R.color.darkGreen))
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -81,29 +81,6 @@ fun SplashScreen(navHostController: NavHostController) {
 
         Spacer(modifier = Modifier.height(76.dp))
 
-        Button(onClick={},
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.green)
-            ),
-            modifier = Modifier
-                .padding(top=16.dp)
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text(
-                text = "Let's Get Started",
-                fontSize = 18.sp,
-                color= Color.White
-            )
-        }
-//        Text(
-//            text = "Already have an account? Sign In"
-//            , color = colorResource(R.color.darkBrown),
-//            textAlign = TextAlign.Center,
-//            fontSize = 18.sp,
-//            lineHeight = 30.sp,
-//            modifier = Modifier.padding(top=16.dp)
-//        )
+
     }
 }

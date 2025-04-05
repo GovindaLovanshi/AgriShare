@@ -39,6 +39,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.serviceapp.R
@@ -48,7 +49,9 @@ import com.google.firebase.ktx.Firebase
 
 
 @Composable
-fun Profile(phoneAuthViewModel: MobileAuthViewModel, navHostController: NavHostController){
+fun Profile( navHostController: NavHostController){
+
+    val phoneAuthViewModel: MobileAuthViewModel = viewModel()
     var name by remember {
         mutableStateOf("")
     }

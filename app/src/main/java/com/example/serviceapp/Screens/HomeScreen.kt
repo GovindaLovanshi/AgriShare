@@ -90,8 +90,8 @@ fun HomeScreen(navHostController: NavHostController){
 
     val BottomNavItem = listOf(
         BottomNavItem("Home", Icons.Default.Home, unseletedIcon = Icons.Outlined.Home),
-        BottomNavItem("WishList", Icons.Default.AddCircle, unseletedIcon = Icons.Outlined.AddCircle),
-        BottomNavItem("Cart", Icons.Default.Menu, unseletedIcon = Icons.Outlined.Menu),
+        BottomNavItem("Job", Icons.Default.AddCircle, unseletedIcon = Icons.Outlined.AddCircle),
+        BottomNavItem("Market", Icons.Default.Menu, unseletedIcon = Icons.Outlined.Menu),
         BottomNavItem("Profile", Icons.Default.Person, unseletedIcon = Icons.Outlined.Person),
 
         )
@@ -390,7 +390,7 @@ fun TopBar(navHostController: NavHostController) {
         )
 
         Text(
-            text = "Good Morning",
+            text = "सुप्रभात! ",
             fontSize = 20.sp,
             color = Color.White,
             modifier = Modifier
@@ -401,7 +401,7 @@ fun TopBar(navHostController: NavHostController) {
                 }
         )
         Text(
-            text = "What are you doing today?",
+            text = "आज आप क्या कर रहे हैं? \uD83D\uDE0A",
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,

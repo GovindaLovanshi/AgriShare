@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
@@ -55,7 +55,9 @@ import com.example.serviceapp.viewmodel.MobileAuthViewModel
 
 @SuppressLint("ContextCastToActivity")
 @Composable
-fun RegistrationScreen(navController: NavHostController,phoneAuthViewModel: MobileAuthViewModel ){
+fun RegistrationScreen(navController: NavHostController){
+
+    val phoneAuthViewModel: MobileAuthViewModel = viewModel()
 
     val authState by phoneAuthViewModel.authState.collectAsState()
     val context = LocalContext.current
@@ -87,7 +89,7 @@ fun RegistrationScreen(navController: NavHostController,phoneAuthViewModel: Mobi
         .padding(16.dp)
         .background(colorResource(R.color.white)), horizontalAlignment = Alignment.CenterHorizontally){
 
-        Spacer(modifier = Modifier.height(26.dp))
+        Spacer(modifier = Modifier.height(126.dp))
         Text("Enter You Mobile Number",
             fontSize = 20.sp,
             color = colorResource(id = R.color.green),

@@ -5,13 +5,12 @@ import java.io.Serializable
 data class EquipmentModel(
     var title:String="",
     var description:String="",
-    var price:Double=0.0,
-    var name:String = "",
-    var numberIn:Int=0,
+    var price:String="",
+    var address:String = "",
+    var imageurl: String = "",
+    var numberIn: String ="",
     var ownerName:String="",
-    var sellerPic:String="",
-    var quantity:Int=0,
-    var phoneNumber:String = ""
+    var quantity: String ="",
 ):Serializable
 
 // title, rent pr hour, uniqueid, description, img, owner name, address to pick,available qunatity,

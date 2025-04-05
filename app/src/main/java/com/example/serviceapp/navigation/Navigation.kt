@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.serviceapp.Forms.JobForm
+import com.example.serviceapp.LanourJob.JobForm
 import com.example.serviceapp.Screens.HomeScreen
 import com.example.serviceapp.Screens.Intro
 import com.example.serviceapp.LanourJob.LabourJobScreen
@@ -38,8 +38,7 @@ fun Navigation(){
 
 
             RegistrationScreen(
-                navController,
-                phoneAuthViewModel = TODO()
+                navController
             )
         }
 
@@ -54,7 +53,7 @@ fun Navigation(){
         }
         composable<Routes.JobForm> {
 
-           JobForm()
+           JobForm(navController)
         }
 
         composable<Routes.Market> {
@@ -67,13 +66,14 @@ fun Navigation(){
            TopBar(navController)
         }
 
-//        composable<Routes.Profile> {
-//
-//
-//            Profile(
-//                navControlle
-//
-//            )
-//        }
+
+        composable<Routes.Profile> {
+
+
+            Profile(
+                navController
+
+            )
+        }
     }
 }
