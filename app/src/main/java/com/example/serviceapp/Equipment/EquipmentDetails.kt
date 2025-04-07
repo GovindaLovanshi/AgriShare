@@ -144,7 +144,7 @@ fun EquipmentDetails(){
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "ad",
+                text = "my name is ",
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,

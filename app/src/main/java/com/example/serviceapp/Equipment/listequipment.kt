@@ -46,7 +46,7 @@ import com.example.serviceapp.LanourJob.JobList
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
 
-@Preview
+
 @Composable
 fun listequipment(navHostController: NavHostController){
 

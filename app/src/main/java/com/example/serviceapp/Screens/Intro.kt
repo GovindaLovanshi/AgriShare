@@ -40,13 +40,13 @@ fun Intro(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.white))
+            .background(colorResource(R.color.green_dark))
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.cartoon),
+            painter = painterResource(R.drawable.intro),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 48.dp)
@@ -55,16 +55,16 @@ fun Intro(navHostController: NavHostController) {
         )
 
         Spacer(modifier = Modifier.height(76.dp))
-        Text(
-            text = "Smart  Solution \n" +
-                    " WIth Service Features\n" +
-                    "and Job Search",
-            color = colorResource(R.color.black),
-            textAlign = TextAlign.Center, fontSize = 26.sp,
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = 40.sp,
-            modifier = Modifier.padding(top = 16.dp)
-        )
+//        Text(
+//            text = "Smart  Solution \n" +
+//                    " WIth Service Features\n" +
+//                    "and Job Search",
+//            color = colorResource(R.color.black),
+//            textAlign = TextAlign.Center, fontSize = 26.sp,
+//            fontWeight = FontWeight.SemiBold,
+//            lineHeight = 40.sp,
+//            modifier = Modifier.padding(top = 16.dp)
+//        )
 
         Spacer(modifier = Modifier.height(76.dp))
 

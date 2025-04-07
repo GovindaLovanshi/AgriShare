@@ -56,17 +56,17 @@ fun LabourJobScreen(navHostController: NavHostController){
     val JobViewmodel : jobviewmodel = viewModel()
     var JobList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
 
-    // Fetch user data
-    LaunchedEffect(true) {
-        JobViewmodel.fetchUserData(
-            onSuccess = { users ->
-                JobList = users
-            },
-            onFailure = { exception ->
-                Log.e("UserForm", "Error fetching user data: $exception")
-            }
-        )
-    }
+//    // Fetch user data
+//    LaunchedEffect(true) {
+//        JobViewmodel.fetchUserData(
+//            onSuccess = { users ->
+//                JobList = users
+//            },
+//            onFailure = { exception ->
+//                Log.e("UserForm", "Error fetching user data: $exception")
+//            }
+//        )
+//    }
 
 
 
