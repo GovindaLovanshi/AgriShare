@@ -43,9 +43,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.serviceapp.R
+import com.example.serviceapp.navigation.Routes
 import com.example.serviceapp.viewmodel.MobileAuthViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import okhttp3.Route
 
 
 @Composable
@@ -156,7 +158,7 @@ fun Profile( navHostController: NavHostController){
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(onClick = {
-            phoneNumber
+            navHostController.navigate(Routes.HomeScreen)
         },
             colors = ButtonDefaults.buttonColors(colorResource(R.color.green))
         ) {

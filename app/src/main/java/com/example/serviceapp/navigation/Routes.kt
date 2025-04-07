@@ -32,6 +32,16 @@ sealed class Routes {
     @Serializable
     data object TopBar:Routes()
 
+    @Serializable
+    data object JobDetailsScreen:Routes()
+
+    @Serializable
+    data object EquipmentForm:Routes()
+
+
+    @Serializable
+    data object listequipment:Routes()
+
 //    @Serializable
 //    data object JobList:Routes()
 }

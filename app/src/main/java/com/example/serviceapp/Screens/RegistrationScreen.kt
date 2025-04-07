@@ -245,6 +245,7 @@ fun RegistrationScreen(navController: NavHostController){
                         if(otp.isNotEmpty() && verificationId != null){
 
                             phoneAuthViewModel.verifyCode(otp,context)
+                            navController.navigate(Routes.Profile)
                         }else{
 
                             Toast.makeText(context,"Please Enter a validOTP",Toast.LENGTH_SHORT).show()

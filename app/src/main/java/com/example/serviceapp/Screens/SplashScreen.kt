@@ -68,18 +68,9 @@ fun SplashScreen(navHostController: NavHostController) {
         )
 
         Spacer(modifier = Modifier.height(76.dp))
-        Text(
-            text = "Smart  Solution \n" +
-                    " WIth Service Features\n" +
-                    "and Job Search",
-            color = colorResource(R.color.black),
-            textAlign = TextAlign.Center, fontSize = 26.sp,
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = 40.sp,
-            modifier = Modifier.padding(top = 16.dp)
-        )
 
-        Spacer(modifier = Modifier.height(76.dp))
+
+
 
 
     }

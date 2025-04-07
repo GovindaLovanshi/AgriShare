@@ -63,7 +63,7 @@ fun JobForm(navHostController: NavHostController) {
     var date by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
 
-    var userList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
+    var JobList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
 
     val context = LocalContext.current
     val imageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -74,7 +74,7 @@ fun JobForm(navHostController: NavHostController) {
     LaunchedEffect(true) {
         JobViewModel.fetchUserData(
             onSuccess = { users ->
-                userList = users
+                JobList = users
             },
             onFailure = { exception ->
                 Log.e("UserForm", "Error fetching user data: $exception")
@@ -191,7 +191,9 @@ fun JobForm(navHostController: NavHostController) {
                     loading = true
                     JobViewModel.uploadImage(
                         imageUri!!,
-                        onSuccess = {}
+                        onSuccess = {
+
+                        }
                     ) { imageUrl ->
                         val formData = jobdetailsmodel(
                             title = title,

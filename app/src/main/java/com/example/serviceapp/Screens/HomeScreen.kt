@@ -92,7 +92,7 @@ fun HomeScreen(navHostController: NavHostController){
         BottomNavItem("Home", Icons.Default.Home, unseletedIcon = Icons.Outlined.Home),
         BottomNavItem("Job", Icons.Default.AddCircle, unseletedIcon = Icons.Outlined.AddCircle),
         BottomNavItem("Market", Icons.Default.Menu, unseletedIcon = Icons.Outlined.Menu),
-        BottomNavItem("Profile", Icons.Default.Person, unseletedIcon = Icons.Outlined.Person),
+        BottomNavItem("Equipment", Icons.Default.Person, unseletedIcon = Icons.Outlined.Person),
 
         )
 
@@ -161,7 +161,7 @@ fun HomeScreen(navHostController: NavHostController){
                                         0 -> navHostController.navigate(Routes.HomeScreen)
                                         1 -> navHostController.navigate(Routes.LabourJobScreen)
                                         2 -> navHostController.navigate(Routes.Market)
-                                        3 -> navHostController.navigate(Routes.Market)
+                                        3 -> navHostController.navigate(Routes.listequipment)
                                     }
 
 
@@ -225,7 +225,10 @@ fun HomeScreen(navHostController: NavHostController){
                        color = Color.Black,
                        fontSize = 16.sp,
 
-                       style = TextStyle(textDecoration = TextDecoration.Underline)
+                       style = TextStyle(textDecoration = TextDecoration.Underline),
+                       modifier = Modifier.clickable {
+                           navHostController.navigate(Routes.LabourJobScreen)
+                       }
                    )
                }
 
@@ -258,6 +261,7 @@ fun HomeScreen(navHostController: NavHostController){
 
 @Composable
 fun List(item:JobModel){
+
     Row(
         Modifier
             .padding(horizontal = 16.dp)
@@ -275,7 +279,10 @@ fun List(item:JobModel){
             color = Color.Black,
             fontSize = 16.sp,
 
-            style = TextStyle(textDecoration = TextDecoration.Underline)
+            style = TextStyle(textDecoration = TextDecoration.Underline),
+                    modifier = Modifier.clickable {
+
+            }
         )
     }
 
