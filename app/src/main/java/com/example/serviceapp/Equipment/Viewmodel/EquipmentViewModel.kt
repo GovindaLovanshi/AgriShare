@@ -1,77 +1,92 @@
 package com.example.serviceapp.Equipment.Viewmodel
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.serviceapp.Equipment.Model.EquipmentModel
+import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 
 class EquipmentViewModel : ViewModel() {
+    private val storage = Firebase.storage
+    private val firestore = FirebaseFirestore.getInstance()
 
-        private val db = FirebaseFirestore.getInstance()
-        private val storage = FirebaseStorage.getInstance()
+    // LiveData for managing state
+    val equpmentDataList = mutableStateListOf<EquipmentModel>()
 
-        private val userCollection = db.collection("item")
+    // Function to submit the form
+    fun submitForm(formData: EquipmentModel) {
+        val formMap = hashMapOf(
+            "title" to formData.title,
+            "address" to formData.address,
+            "imageUrl" to formData.imageUrl,
+            "price" to formData.price,
+            "ownerName" to formData.ownerName,
+            "call" to formData.call,
 
-        // Add or Update user data
-        fun addOrUpdateUser(userData:EquipmentModel) {
-            viewModelScope.launch {
-                val userId = UUID.randomUUID().toString() // Or use an existing ID for update
-                userCollection.document(userId).set(userData)
-            }
-        }
+        )
 
-    // Fetch user data
-    fun fetchUserData(onSuccess: (List<EquipmentModel>) -> Unit, onFailure: (Exception) -> Unit) {
-        userCollection.get()
-            .addOnSuccessListener { result ->
-                val item = result.documents.map { doc ->
-                    EquipmentModel(
-                        title = doc.getString("title") ?: "",
-                        description = doc.getString("description") ?: "",
-                        price = doc.getString("price") ?: "",
-                        address = doc.getString("address") ?: "",
-                        imageurl = doc.getString("imageUrl") ?: "",
-                        numberIn = doc.getString("numberIn") ?: "",
-                        ownerName = doc.getString("ownerName") ?: "",
-                        quantity = doc.getString("quantity") ?: "",
-                    )
+        formData.imageUrl?.let { uri ->
+            val imageRef = storage.reference.child("images/${System.currentTimeMillis()}.jpg")
+            imageRef.putFile(uri)
+                .addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                        formMap["imageUrl"] = downloadUrl.toString()
+                        // Save to Firestore
+                        firestore.collection("equipment")
+                            .add(formMap)
+                            .addOnSuccessListener {
+                                // Form successfully saved
+                            }
+                            .addOnFailureListener {
+                                // Handle error
+                            }
+                    }
                 }
-                onSuccess(item)
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
-    }
-
-    // Upload image to Firebase Storage
-    fun uploadImage(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
-        val storageRef: StorageReference = storage.reference.child("images/${UUID.randomUUID()}")
-        val uploadTask = storageRef.putFile(imageUri)
-
-        uploadTask.addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                onSuccess(uri.toString())
-            }
-        }.addOnFailureListener { exception ->
-            onFailure(exception)
+                .addOnFailureListener {
+                    // Handle image upload failure
+                }
+        } ?: run {
+            // Save without image if no image was selected
+            firestore.collection("equipment")
+                .add(formMap)
+                .addOnSuccessListener {
+                    // Form successfully saved
+                }
+                .addOnFailureListener {
+                    // Handle error
+                }
         }
     }
 
-    // Function to upload form data to Firebase Firestore
-    fun uploadFormData(equipment: EquipmentModel, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        db.collection("forms")
-            .add(equipment)
-            .addOnSuccessListener {
-                onSuccess()
+    // Function to retrieve form data from Firestore
+    fun getFormData() {
+        firestore.collection("forms")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                equpmentDataList.clear()
+                querySnapshot.documents.forEach { document ->
+                    val title = document.getString("title") ?: ""
+                    val call = document.getString("call") ?: ""
+                    val address = document.getString("address") ?: ""
+                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val description = document.getString("description") ?: ""
+                    val price = document.getString("price") ?: ""
+                    val ownerName = document.getString("ownerName") ?: ""
+                    val formData = EquipmentModel(title,description,price,address,imageUrl= null,call,ownerName)
+                    equpmentDataList.add(formData)
+                }
             }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
+            .addOnFailureListener {
+                // Handle error
             }
     }
 }

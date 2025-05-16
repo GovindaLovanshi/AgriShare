@@ -1,5 +1,6 @@
 package com.example.serviceapp.LanourJob
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,10 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,9 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.serviceapp.LanourJob.JobViewModel.jobviewmodel
+import coil.compose.AsyncImage
+import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
 import com.example.serviceapp.LanourJob.Model.JobModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
@@ -53,29 +53,18 @@ import com.example.serviceapp.navigation.Routes
 
 @Composable
 fun LabourJobScreen(navHostController: NavHostController){
-    val JobViewmodel : jobviewmodel = viewModel()
-    var JobList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
+    val JobViewmodel : jobViewModel = viewModel()
+    val formDataList = JobViewmodel.formDataList
+    val context = LocalContext.current
 
-//    // Fetch user data
-//    LaunchedEffect(true) {
-//        JobViewmodel.fetchUserData(
-//            onSuccess = { users ->
-//                JobList = users
-//            },
-//            onFailure = { exception ->
-//                Log.e("UserForm", "Error fetching user data: $exception")
-//            }
-//        )
-//    }
+    LaunchedEffect(true) {
+        JobViewmodel.getFormData()
+    }
 
 
 
-//    LaunchedEffect(true) {
-//        JobViewmodel.fetchUserData(
-//            onSuccess = TODO(),
-//            onFailure = TODO()
-//        )
-//    }
+
+
 
     Scaffold(
         floatingActionButton = {
@@ -152,11 +141,11 @@ fun LabourJobScreen(navHostController: NavHostController){
 
             LazyColumn {
 
-                items(JobList) { data->
-                    JobList(JobModel = data, onClick = {
+                items(formDataList) { data->
+                    JobList(JobModel = data,
+                        onClick = {
                         navHostController.navigate(Routes.JobDetailsScreen)
-                    })
-
+                    },navHostController)
                 }
             }
         }
@@ -168,15 +157,17 @@ fun LabourJobScreen(navHostController: NavHostController){
 @Composable
 fun JobList(
     JobModel: jobdetailsmodel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    navHostController: NavHostController
 
 ){
     val context = LocalContext.current
-    val JobViewmodel : jobviewmodel = viewModel()
+
 
 
     Row (
         modifier = Modifier.padding(8.dp).clickable {
+
 
 
 
@@ -198,7 +189,7 @@ fun JobList(
                 .fillMaxHeight()
                 .padding(start = 8.dp)
                 .clickable {
-
+                    navHostController.navigate(Routes.JobDetailsScreen)
                 },
             verticalArrangement = Arrangement.spacedBy(8.dp)
 
@@ -221,14 +212,14 @@ fun JobList(
                 )
             }
             Text(
-                text = JobModel.call,
+                text = "8269113752",
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1
             )
             Text(
-                text = "Date: ${JobModel.date}",
+                text = "15-05-25",
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,

@@ -1,8 +1,15 @@
 package com.example.serviceapp.LanourJob
 
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,65 +39,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.serviceapp.DetailScreen.JObDetails
-import com.example.serviceapp.LanourJob.JobViewModel.jobviewmodel
+import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import com.example.serviceapp.LanourJob.Model.JobModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
 
-@Preview
+
 @Composable
-fun JobDetailsScreen() {
-    val JobViewModel: jobviewmodel = viewModel()
-    val JobViewmodel : jobviewmodel = viewModel()
-    var JobList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
+fun JobDetailsScreen(navHostController: NavHostController ){
+    val JobViewmodel : jobViewModel = viewModel()
+    val equpmentDataList = JobViewmodel.formDataList
 
-    // Fetch user data
+
     LaunchedEffect(true) {
-        JobViewmodel.fetchUserData(
-            onSuccess = { users ->
-                JobList = users
-            },
-            onFailure = { exception ->
-                Log.e("UserForm", "Error fetching user data: $exception")
-            }
-        )
+        JobViewmodel.getFormData()
     }
-
     Scaffold(
         topBar = {
             TopBarJob()
         },
         bottomBar = {
-            Button(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-                onClick = { /* TODO: Implement click action */ },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color.Blue)
-            ) {
-                androidx.compose.material3.Text(
-                    text = "Connect ", color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
+
         }
 
     ) {padding ->
 
         LazyColumn (modifier = Modifier.padding(padding)){
 
-            items(JobList) { data->
-                JobList(JobModel = data, onClick = {
-
-                })
+            items(equpmentDataList) { data->
+                JObDetails(data )
 
             }
         }
@@ -101,15 +89,20 @@ fun JobDetailsScreen() {
 @Composable
 fun JObDetails(
     JobModel: jobdetailsmodel,
-    onClick: () -> Unit
+
 ){
 
-    val JobViewModel: jobviewmodel = viewModel()
+    val JobViewModel: jobViewModel = viewModel()
+    val context= LocalContext.current
+
+    LaunchedEffect(true) {
+        JobViewModel.getFormData()
+    }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
 
         Row (modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(R.drawable.homed),
+            Image(painter = painterResource(R.drawable.cartoon),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
@@ -117,7 +110,7 @@ fun JObDetails(
                 contentScale = ContentScale.Crop)
 
             Text(
-                text = "Name Of Company",
+                text = JobModel.title,
                 modifier = Modifier.padding(start = 20.dp),
                 color = Color.Black,
                 fontSize = 14.sp,
@@ -127,9 +120,7 @@ fun JObDetails(
 
 
         }
-        Row (
-            modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically
-        ){
+
 
 
 
@@ -143,7 +134,7 @@ fun JObDetails(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = JobModel.title,
+                    text = "₹2000",
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -163,7 +154,7 @@ fun JObDetails(
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = JobModel.date,
+                    text = "15-05-25",
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -173,7 +164,7 @@ fun JObDetails(
 
 
                 Text(
-                    text = JobModel.call,
+                    text = "8269113765",
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -184,7 +175,7 @@ fun JObDetails(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = JobModel.description,
+                    text = "Carpenter needed",
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -194,8 +185,31 @@ fun JObDetails(
             }
         }
 
+        Spacer(modifier = Modifier.height(200.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp),
+            onClick = {
+
+
+                val phoneNumber="tel:"+JobModel.call
+                val diaIntent= Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                context.startActivity(diaIntent)
+
+            },
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.buttonColors(Color.Blue)
+        ) {
+            Text(
+                text = "Connect ", color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+
+
+            )
+        }
+
 
 
 
     }
-}

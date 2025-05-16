@@ -1,5 +1,6 @@
 package com.example.serviceapp.Equipment
 
+import android.media.audiofx.DynamicsProcessing.Eq
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,11 +29,13 @@ import androidx.compose.material.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,9 +43,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.serviceapp.Equipment.Model.EquipmentModel
+import com.example.serviceapp.Equipment.Viewmodel.EquipmentViewModel
 import com.example.serviceapp.LanourJob.JobList
+import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
 
@@ -50,6 +57,13 @@ import com.example.serviceapp.navigation.Routes
 @Composable
 fun listequipment(navHostController: NavHostController){
 
+    val EquipmentViewModel : EquipmentViewModel = viewModel()
+    val formDataList = EquipmentViewModel.equpmentDataList
+    val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        EquipmentViewModel.getFormData()
+    }
 
 
     Scaffold(
@@ -79,7 +93,7 @@ fun listequipment(navHostController: NavHostController){
 
             Box(modifier = Modifier.fillMaxWidth()){
 
-                androidx.compose.material3.Text(text = "Job Section",
+                androidx.compose.material3.Text(text = "Equipment Section",
                     fontSize = 28.sp,
                     color = colorResource(id = R.color.green),
                     modifier = Modifier.
@@ -129,9 +143,15 @@ fun listequipment(navHostController: NavHostController){
 
             LazyColumn {
 
-                item {
-
-                     ListEquipment()
+                items(formDataList) { data->
+                    ListEquipment()
+                    ListEquipment()
+                    ListEquipment()
+                    ListEquipment()
+                    ListEquipment()
+                    ListEquipment()
+                    ListEquipment()
+                    ListEquipment()
                 }
 
 
@@ -141,7 +161,10 @@ fun listequipment(navHostController: NavHostController){
     }
 
 @Composable
-fun ListEquipment(){
+fun ListEquipment(
+
+
+){
     Row (
         modifier = Modifier.padding(8.dp).clickable {
 
@@ -171,7 +194,7 @@ fun ListEquipment(){
 
         ) {
             Text(
-                text = "JobModel.title",
+                text = "JCB",
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -180,7 +203,7 @@ fun ListEquipment(){
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(painter = painterResource(R.drawable.location), contentDescription = null)
                 Text(
-                    text = "JobModel.address",
+                    text = "Indore",
                     color = Color.Black,
                     fontSize = 12.sp,
                     maxLines = 1,

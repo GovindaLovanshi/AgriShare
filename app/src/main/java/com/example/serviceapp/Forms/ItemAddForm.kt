@@ -42,8 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.example.serviceapp.LanourJob.JobViewModel.jobviewmodel
+import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
@@ -52,7 +51,7 @@ import com.example.serviceapp.navigation.Routes
 @Composable
 fun JobForm() {
 
-    val JobViewModel: jobviewmodel = viewModel()
+    val JobViewModel: jobViewModel = viewModel()
 
 
     var title by remember { mutableStateOf("") }
@@ -61,26 +60,16 @@ fun JobForm() {
     var description by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var date by remember { mutableStateOf("") }
-    var loading by remember { mutableStateOf(false) }
 
-    var userList by remember { mutableStateOf<List<jobdetailsmodel>>(emptyList()) }
+
+
 
     val context = LocalContext.current
     val imageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         imageUri = uri
     }
 
-    // Fetch user data
-    LaunchedEffect(true) {
-        JobViewModel.fetchUserData(
-            onSuccess = { users ->
-                userList = users
-            },
-            onFailure = { exception ->
-                Log.e("UserForm", "Error fetching user data: $exception")
-            }
-        )
-    }
+
 
     Column (
         modifier = Modifier
@@ -212,31 +201,7 @@ fun JobForm() {
             modifier = Modifier.width(250.dp),
             onClick = {
 
-                if (title.isNotEmpty() && call.isNotEmpty() && address.isNotEmpty() && description.isNotEmpty() && imageUri != null && date.isNotEmpty()) {
-                    loading = true
-                    JobViewModel.uploadImage(
-                        imageUri!!,
-                        onSuccess = {}
-                    ) { imageUrl ->
-                        val formData = jobdetailsmodel(
-                            title = title,
-                            call = call,
-                            address = address,
-                            description = description,
-                            imageUrl = imageUrl.toString(),
-                            date = date
-                        )
-                        JobViewModel.uploadFormData(formData, {
-                            loading = false
-                            Toast.makeText(context, "Data uploaded successfully", Toast.LENGTH_SHORT).show()
-                        }, { exception ->
-                            loading = false
-                            Toast.makeText(context, "Upload failed: ${exception.message}", Toast.LENGTH_SHORT).show()
-                        })
-                    }
-                } else {
-                    Toast.makeText(context, "Please fill in all fields and select an image", Toast.LENGTH_SHORT).show()
-                }
+
 
 
             },

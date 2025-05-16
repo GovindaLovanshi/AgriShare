@@ -1,5 +1,6 @@
 package com.example.serviceapp.Screens
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,12 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.serviceapp.R
+import com.example.serviceapp.navigation.Routes
+import com.example.serviceapp.viewmodel.MobileAuthViewModel
 
 
-@Preview
 @Composable
-fun SettingScreen() {
+fun SettingScreen(navHostController: NavHostController) {
+    val phoneAuthViewModel: MobileAuthViewModel = viewModel()
     Column(
         Modifier
             .fillMaxWidth()
@@ -37,26 +43,26 @@ fun SettingScreen() {
     ) {
         ConstraintLayout(
             Modifier
-                .height(250.dp)
-                .background(color = Color(android.graphics.Color.parseColor("#32357a")))
+                .height(200.dp)
+                .background(color = Color(android.graphics.Color.parseColor("#293A16")))
         ) {
             val (topImg, profile, title, back, pen) = createRefs()
 
             Image(
                 painterResource(id = R.drawable.profile), null, Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().height(100.dp)
                     .constrainAs(topImg) {
                         bottom.linkTo(parent.bottom)
                     })
-            Image(
-                painterResource(id = R.drawable.location), null, Modifier
-                    .fillMaxWidth()
-                    .constrainAs(profile) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(topImg.bottom)
-                    })
-            Text(text = "Setting",
+//            Image(
+//                painterResource(id = R.drawable.location), null, Modifier
+//                    .fillMaxWidth()
+//                    .constrainAs(profile) {
+//                        start.linkTo(parent.start)
+//                        end.linkTo(parent.end)
+//                        bottom.linkTo(topImg.bottom)
+//                    })
+            Text(text = "Profile",
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 30.sp
@@ -75,19 +81,19 @@ fun SettingScreen() {
                         start.linkTo(parent.start, margin = 24.dp)
 
                     })
-            Image(
-                painterResource(id = R.drawable.fav_icon), null, Modifier
-                    .constrainAs(pen) {
-                        top.linkTo(profile.top)
-                        start.linkTo(profile.end)
-                    })
+//            Image(
+//                painterResource(id = R.drawable.fav_icon), null, Modifier
+//                    .constrainAs(pen) {
+//                        top.linkTo(profile.top)
+//                        start.linkTo(profile.end)
+//                    })
         }
         Text(
-            text = "gaju",
+            text = "Govinda",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 16.dp),
-            color = Color(android.graphics.Color.parseColor("#32357a"))
+            color = Color(android.graphics.Color.parseColor("#293A16"))
         )
         Text(
             text = "8269113752",
@@ -108,6 +114,7 @@ fun SettingScreen() {
                 Image(painter = painterResource(id = R.drawable.btn_1),
                     null,
                     modifier = Modifier
+                        .width(30.dp).height(25.dp)
                         .padding(end = 5.dp)
                         .clickable { })
             }
@@ -131,6 +138,7 @@ fun SettingScreen() {
                     painter = painterResource(id = R.drawable.arrow),
                     null,
                     Modifier
+                        .height(25.dp).width(25.dp)
                         .padding(end = 5.dp)
                         .clickable { })
             }
@@ -151,7 +159,7 @@ fun SettingScreen() {
             ) {
                 Image(painter = painterResource(id = R.drawable.btn_4),
                     null,
-                    modifier = Modifier
+                    modifier = Modifier.width(30.dp).height(30.dp)
                         .padding(end = 5.dp)
                         .clickable { })
             }
@@ -175,6 +183,7 @@ fun SettingScreen() {
                     painter = painterResource(id = R.drawable.arrow),
                     null,
                     Modifier
+                        .height(25.dp).width(25.dp)
                         .padding(end = 5.dp)
                         .clickable { })
             }
@@ -192,7 +201,7 @@ fun SettingScreen() {
             ) {
                 Image(painter = painterResource(id = R.drawable.home),
                     null,
-                    modifier = Modifier
+                    modifier = Modifier.height(22.dp)
                         .padding(end = 5.dp)
                         .clickable { })
             }
@@ -205,11 +214,14 @@ fun SettingScreen() {
                     text = "Logout",
                     color = Color.Black,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.clickable {
+
+                        navHostController.navigate(Routes.Intro)
+                    }
                 )
             }
 
         }
     }
 }
-

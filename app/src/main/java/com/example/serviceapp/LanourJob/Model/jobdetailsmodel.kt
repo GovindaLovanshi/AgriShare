@@ -1,11 +1,14 @@
 package com.example.serviceapp.LanourJob.Model
 
-data class jobdetailsmodel(
-var title: String = "",
-var call: String = "",
-var address: String = "",
-var description: String = "",
-var imageUrl: String = "",
-var date :String = ""
+import android.net.Uri
 
+data class jobdetailsmodel(
+    var title: String = "",
+    var call: String = "",
+    var address: String = "",
+    var age: String = "",
+    var Salary: String = "",
+    var description: String = "",
+    var imageUrl: String? = null,
+    var date: String = ""
 )

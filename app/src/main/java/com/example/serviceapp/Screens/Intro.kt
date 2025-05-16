@@ -69,7 +69,7 @@ fun Intro(navHostController: NavHostController) {
         Spacer(modifier = Modifier.height(76.dp))
 
         Button(onClick={
-            navHostController.navigate(Routes.RegistrationScreen)
+            navHostController.navigate(Routes.HomeScreen)
         },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(

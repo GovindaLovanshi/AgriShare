@@ -1,5 +1,7 @@
 package com.example.serviceapp.Equipment
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,31 +13,85 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.serviceapp.Equipment.Model.EquipmentModel
+import com.example.serviceapp.Equipment.Viewmodel.EquipmentViewModel
+import com.example.serviceapp.LanourJob.JObDetails
+import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import com.example.serviceapp.LanourJob.TopBarJob
 import com.example.serviceapp.R
+import com.example.serviceapp.navigation.Routes
 
-@Preview
+
 @Composable
-fun EquipmentDetails(){
+fun EquipmentDetails(navHostController: NavHostController){
+
+    val EqupmentViewModel : EquipmentViewModel = viewModel()
+    val formDataList = EqupmentViewModel.equpmentDataList
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        EqupmentViewModel.getFormData()
+    }
 
 
+    Scaffold(
+        topBar = {
+            TopBarEqup()
+        },
+        bottomBar = {
+
+        }
+
+    ) {padding ->
+
+        LazyColumn (modifier = Modifier.padding(padding)){
+
+            items(formDataList) { data->
+                listEquipement(data , onClick = {
+                    navHostController.navigate(Routes.listequipment)
+                },navHostController)
+
+            }
+        }
+    }
+}
+@Composable
+fun listEquipement(
+    equpmentModel:EquipmentModel,
+    onClick :()->Unit,
+    navHostController: NavHostController
+){
+
+    val EqupmentViewModel : EquipmentViewModel = viewModel()
+    val formDataList = EqupmentViewModel.equpmentDataList
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        EqupmentViewModel.getFormData()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +118,7 @@ fun EquipmentDetails(){
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(
-                text = "JCB",
+                text = equpmentModel.title,
                 fontSize = 23.sp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,7 +126,7 @@ fun EquipmentDetails(){
                     .padding(end = 16.dp)
             )
             Text(
-                text = "300 Pr/Day",
+                text = equpmentModel.price,
                 fontSize = 22.sp
             )
         }
@@ -103,7 +159,7 @@ fun EquipmentDetails(){
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Name Of Job",
+                text = equpmentModel.call,
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -113,7 +169,7 @@ fun EquipmentDetails(){
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(painter = painterResource(R.drawable.location), contentDescription = null)
                 Text(
-                    text = "Address",
+                    text = equpmentModel.ownerName,
                     color = Color.Black,
                     fontSize = 12.sp,
                     maxLines = 1,
@@ -121,19 +177,12 @@ fun EquipmentDetails(){
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "Date : 05-04-2025",
-                color = Color.Black,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1
-            )
+
             Spacer(modifier = Modifier.height(12.dp))
 
 
             Text(
-                text = "About The Equipment",
+                text = equpmentModel.description,
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -143,12 +192,6 @@ fun EquipmentDetails(){
             HorizontalDivider()
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = "my name is ",
-                color = Color.Black,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
 
 
             Spacer(modifier = Modifier.height(150.dp))
@@ -157,7 +200,11 @@ fun EquipmentDetails(){
                 modifier = Modifier.fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp)
                 ,
-                onClick = { /* TODO: Implement click action */ },
+                onClick = {
+                    val phoneNumber="tel:"+equpmentModel.call
+                    val diaIntent= Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                    context.startActivity(diaIntent)
+                },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(Color.Blue)
             ) {

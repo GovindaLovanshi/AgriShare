@@ -1,5 +1,6 @@
 package com.example.serviceapp.Screens
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +45,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -66,6 +69,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.bottombar.AnimatedBottomBar
 import com.example.bottombar.components.BottomBarItem
@@ -74,7 +79,10 @@ import com.example.bottombar.model.IndicatorStyle
 import com.example.serviceapp.Equipment.Category
 import com.example.serviceapp.Equipment.ItemsPopular
 import com.example.serviceapp.Equipment.Model.EquipmentModel
+import com.example.serviceapp.LanourJob.JobList
+import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
 import com.example.serviceapp.LanourJob.Model.JobModel
+import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
 import com.example.serviceapp.Utilites.BottomNavItem
 import com.example.serviceapp.Utilites.MyBottomBar
@@ -84,27 +92,27 @@ import com.example.serviceapp.navigation.Routes
 
 @Composable
 fun HomeScreen(navHostController: NavHostController){
+    val context = LocalContext.current
 
     var selectedItem by remember { mutableIntStateOf(0) }
     val shouldShowBottomBar = remember { mutableStateOf(true) }
+
+    val JobViewmodel : jobViewModel = viewModel()
+    val formDataList = JobViewmodel.formDataList
+
+    LaunchedEffect(true) {
+        JobViewmodel.getFormData()
+    }
 
     val BottomNavItem = listOf(
         BottomNavItem("Home", Icons.Default.Home, unseletedIcon = Icons.Outlined.Home),
         BottomNavItem("Job", Icons.Default.AddCircle, unseletedIcon = Icons.Outlined.AddCircle),
         BottomNavItem("Market", Icons.Default.Menu, unseletedIcon = Icons.Outlined.Menu),
         BottomNavItem("Equipment", Icons.Default.Person, unseletedIcon = Icons.Outlined.Person),
-
+        BottomNavItem("Setting", Icons.Default.Person, unseletedIcon = Icons.Outlined.Settings),
         )
 
-    val jobData = listOf(
-        JobModel(
-            R.drawable.cartoon,
-            location = "Indore",
-            jobName = "CCC2",
-            description = "some work ",
-            date = "16 Oct"
-        ),
-    )
+
     Scaffold(
         topBar = {
             TopBar(navHostController)
@@ -162,6 +170,7 @@ fun HomeScreen(navHostController: NavHostController){
                                         1 -> navHostController.navigate(Routes.LabourJobScreen)
                                         2 -> navHostController.navigate(Routes.Market)
                                         3 -> navHostController.navigate(Routes.listequipment)
+                                        4 -> navHostController.navigate(Routes.SettingScreen)
                                     }
 
 
@@ -203,9 +212,9 @@ fun HomeScreen(navHostController: NavHostController){
         ) {
 
 
-            item {
-                Search()
-            }
+//            item {
+//                Search()
+//            }
 
            item {
                Row(
@@ -248,8 +257,37 @@ fun HomeScreen(navHostController: NavHostController){
                }
            }
 
-            items(jobData) {
-               List(item = it)
+            item{
+                Row(
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp)
+                ) {
+                    Text(
+                        text = "Latest Jobs",
+                        color = Color.Black,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "See all",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+
+                        style = TextStyle(textDecoration = TextDecoration.Underline),
+                        modifier = Modifier.clickable {
+                            navHostController.navigate(Routes.LabourJobScreen)
+                        }
+                    )
+                }
+            }
+
+
+
+            items(formDataList) { data->
+                List(data, onClick = {
+                })
 
             }
 
@@ -259,43 +297,21 @@ fun HomeScreen(navHostController: NavHostController){
 }
 
 
+
 @Composable
-fun List(item:JobModel){
-
-    Row(
-        Modifier
-            .padding(horizontal = 16.dp)
-            .padding(top = 16.dp)
-    ) {
-        Text(
-            text = "Recommend Work For You",
-            color = Color.Black,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.weight(1f)
-        )
-        Text(
-            text = "See all",
-            color = Color.Black,
-            fontSize = 16.sp,
-
-            style = TextStyle(textDecoration = TextDecoration.Underline),
-                    modifier = Modifier.clickable {
-
-            }
-        )
-    }
-
-    LazyColumn   (
+fun List(JobModel: jobdetailsmodel,
+         onClick: () -> Unit){
+    val context = LocalContext.current
+    Column   (
         modifier = Modifier
-            .height(400.dp)
+            .height(150.dp)
             .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
         ,
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp)
+
     ){
-        item {
-            Row(
+        Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White, shape = RoundedCornerShape(10.dp))
@@ -320,7 +336,7 @@ fun List(item:JobModel){
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = item.jobName,
+                        text = JobModel.title,
                         color = Color.Black,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
@@ -329,7 +345,7 @@ fun List(item:JobModel){
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(painter = painterResource(R.drawable.location), contentDescription = null)
                         Text(
-                            text = item.location,
+                            text = JobModel.address,
                             color = Color.Black,
                             fontSize = 12.sp,
                             maxLines = 1,
@@ -337,14 +353,14 @@ fun List(item:JobModel){
                         )
                     }
                     Text(
-                        text = item.description,
+                        text = "15-05-25",
                         color = Color.Black,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1
                     )
                     Text(
-                        text = item.date,
+                        text = "₹2000",
                         color = Color.Black,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -357,7 +373,7 @@ fun List(item:JobModel){
         }
 
     }
-}
+
 
 @Composable
 fun TopBar(navHostController: NavHostController) {
@@ -434,10 +450,12 @@ fun TopBar(navHostController: NavHostController) {
         ) {
             val (icon1, icon2, balance, reward, amount, wallet, arrow1, arrow2, arrow3, line1, line2) = createRefs()
 
-            Image(painter = painterResource(R.drawable.fav_icon),
+            Image(painter = painterResource(R.drawable.mar),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = horizontalPadding, top = verticalPadding)
+                    .width(20.dp)
+                    .height(20.dp)
                     .constrainAs(icon1) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
@@ -455,7 +473,8 @@ fun TopBar(navHostController: NavHostController) {
                     .constrainAs(wallet) {
                         bottom.linkTo(icon1.bottom)
                         start.linkTo(icon1.end)
-                    }.clickable {
+                    }
+                    .clickable {
                         navHostController.navigate(Routes.Market)
                     }
             )
@@ -470,10 +489,12 @@ fun TopBar(navHostController: NavHostController) {
                     }
             )
 
-            Image(painter = painterResource(R.drawable.medal),
+            Image(painter = painterResource(R.drawable.harvester),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = horizontalPadding, bottom = verticalPadding)
+                    .width(20.dp)
+                    .height(20.dp)
                     .constrainAs(icon2) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
@@ -569,41 +590,41 @@ fun TopBar(navHostController: NavHostController) {
     }
 }
 
-@Composable
-@Preview
-fun Search(){
-    var text by rememberSaveable { mutableStateOf("") }
-    androidx.compose.material.TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = {
-            Text(
-                text = "Searching.....",
-                fontSize = 16.sp,
-                color = Color.Black
-            )
-        }, shape = RoundedCornerShape(10.dp),
-        leadingIcon = {
-            Image(
-                painter = painterResource(R.drawable.search_icon),
-                contentDescription = null,
-                modifier = Modifier.size(22.dp)
-            )
-        },
-        colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
-            backgroundColor = colorResource(R.color.white),
-            focusedBorderColor = Color.Transparent,
-            unfocusedLabelColor = Color.Transparent,
-            textColor = Color.DarkGray,
-            unfocusedBorderColor = Color.Transparent
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .height(50.dp)
-            .background(colorResource(R.color.grey), CircleShape)
-    )
-}
+//@Composable
+//@Preview
+//fun Search(){
+//    var text by rememberSaveable { mutableStateOf("") }
+//    androidx.compose.material.TextField(
+//        value = text,
+//        onValueChange = { text = it },
+//        label = {
+//            Text(
+//                text = "Searching.....",
+//                fontSize = 16.sp,
+//                color = Color.Black
+//            )
+//        }, shape = RoundedCornerShape(10.dp),
+//        leadingIcon = {
+//            Image(
+//                painter = painterResource(R.drawable.search_icon),
+//                contentDescription = null,
+//                modifier = Modifier.size(22.dp)
+//            )
+//        },
+//        colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+//            backgroundColor = colorResource(R.color.white),
+//            focusedBorderColor = Color.Transparent,
+//            unfocusedLabelColor = Color.Transparent,
+//            textColor = Color.DarkGray,
+//            unfocusedBorderColor = Color.Transparent
+//        ),
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(16.dp)
+//            .height(50.dp)
+//            .background(colorResource(R.color.grey), CircleShape)
+//    )
+//}
 
 data class BottomNavItem(val name: String, val icon: ImageVector, val unseletedIcon: ImageVector)
 

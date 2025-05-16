@@ -17,6 +17,7 @@ sealed class Routes {
     @Serializable
     data object LabourJobScreen:Routes()
 
+
     @Serializable
     data object Market:Routes()
 
@@ -41,6 +42,15 @@ sealed class Routes {
 
     @Serializable
     data object listequipment:Routes()
+
+    @Serializable
+    data object EquipmentDetails:Routes()
+
+    @Serializable
+    data object SettingScreen:Routes()
+
+    @Serializable
+    data object JobList:Routes()
 
 //    @Serializable
 //    data object JobList:Routes()
