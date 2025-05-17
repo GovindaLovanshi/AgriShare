@@ -39,7 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.serviceapp.Equipment.Model.EquipmentModel
 import com.example.serviceapp.Equipment.Viewmodel.EquipmentViewModel
-import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
 

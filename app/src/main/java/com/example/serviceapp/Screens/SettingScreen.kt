@@ -169,10 +169,11 @@ fun SettingScreen(navHostController: NavHostController) {
                     .weight(1f)
             ) {
                 Text(
-                    text = "Share",
+                    text = "My Appointment",
                     color = Color.Black,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+
                 )
             }
             Column(

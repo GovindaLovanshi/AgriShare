@@ -49,7 +49,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.serviceapp.DetailScreen.JObDetails
-import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import com.example.serviceapp.LanourJob.JobViewModel.JobViewModel
+
 import com.example.serviceapp.LanourJob.Model.JobModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
@@ -58,12 +59,12 @@ import com.example.serviceapp.navigation.Routes
 
 @Composable
 fun JobDetailsScreen(navHostController: NavHostController ){
-    val JobViewmodel : jobViewModel = viewModel()
-    val equpmentDataList = JobViewmodel.formDataList
+    val JobViewmodel : JobViewModel = viewModel()
+    val datalist = JobViewmodel.jobList
 
 
     LaunchedEffect(true) {
-        JobViewmodel.getFormData()
+        JobViewmodel.fetchJobs()
     }
     Scaffold(
         topBar = {
@@ -77,7 +78,7 @@ fun JobDetailsScreen(navHostController: NavHostController ){
 
         LazyColumn (modifier = Modifier.padding(padding)){
 
-            items(equpmentDataList) { data->
+            items(datalist) { data->
                 JObDetails(data )
 
             }
@@ -92,22 +93,20 @@ fun JObDetails(
 
 ){
 
-    val JobViewModel: jobViewModel = viewModel()
-    val context= LocalContext.current
+    val context = LocalContext.current
 
-    LaunchedEffect(true) {
-        JobViewModel.getFormData()
-    }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
 
         Row (modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(R.drawable.cartoon),
+            AsyncImage(
+                model = JobModel.imageUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
-                    .clip(shape = CircleShape),
-                contentScale = ContentScale.Crop)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
 
             Text(
                 text = JobModel.title,
@@ -134,7 +133,7 @@ fun JObDetails(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "₹2000",
+                    text = JobModel.Salary,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -154,7 +153,7 @@ fun JObDetails(
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "15-05-25",
+                    text = JobModel.date,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -164,7 +163,7 @@ fun JObDetails(
 
 
                 Text(
-                    text = "8269113765",
+                    text = JobModel.call,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -175,7 +174,7 @@ fun JObDetails(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "Carpenter needed",
+                    text = JobModel.description,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,

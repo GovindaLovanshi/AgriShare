@@ -43,7 +43,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import com.example.serviceapp.LanourJob.JobViewModel.JobViewModel
+
 import com.example.serviceapp.LanourJob.Model.JobModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
@@ -53,12 +54,12 @@ import com.example.serviceapp.navigation.Routes
 
 @Composable
 fun LabourJobScreen(navHostController: NavHostController){
-    val JobViewmodel : jobViewModel = viewModel()
-    val formDataList = JobViewmodel.formDataList
+    val JobViewmodel : JobViewModel = viewModel()
+    val formDataList = JobViewmodel.jobList
     val context = LocalContext.current
 
-    LaunchedEffect(true) {
-        JobViewmodel.getFormData()
+    LaunchedEffect(Unit) {
+        JobViewmodel.fetchJobs()
     }
 
 
@@ -141,11 +142,10 @@ fun LabourJobScreen(navHostController: NavHostController){
 
             LazyColumn {
 
-                items(formDataList) { data->
-                    JobList(JobModel = data,
-                        onClick = {
-                        navHostController.navigate(Routes.JobDetailsScreen)
-                    },navHostController)
+                items(formDataList) { job ->
+                    JobList(
+                        JobModel = job,
+                        onClick = {})
                 }
             }
         }
@@ -158,7 +158,6 @@ fun LabourJobScreen(navHostController: NavHostController){
 fun JobList(
     JobModel: jobdetailsmodel,
     onClick: () -> Unit,
-    navHostController: NavHostController
 
 ){
     val context = LocalContext.current
@@ -174,12 +173,14 @@ fun JobList(
         }, verticalAlignment = Alignment.CenterVertically
     ){
 
-        Image(painter = painterResource(R.drawable.cartoon),
+        AsyncImage(
+            model = JobModel.imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .size(80.dp)
-                .clip(shape = CircleShape),
-            contentScale = ContentScale.Crop)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -188,9 +189,7 @@ fun JobList(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(start = 8.dp)
-                .clickable {
-                    navHostController.navigate(Routes.JobDetailsScreen)
-                },
+                ,
             verticalArrangement = Arrangement.spacedBy(8.dp)
 
         ) {
@@ -212,14 +211,14 @@ fun JobList(
                 )
             }
             Text(
-                text = "8269113752",
+                text = JobModel.call,
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1
             )
             Text(
-                text = "15-05-25",
+                text = JobModel.date,
                 color = Color.Black,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,

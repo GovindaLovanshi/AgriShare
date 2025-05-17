@@ -4,12 +4,16 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,26 +26,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import coil.compose.rememberAsyncImagePainter
+import com.example.serviceapp.LanourJob.JobViewModel.JobViewModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
-import com.example.serviceapp.navigation.Routes
-
 
 
 @Composable
 fun JobForm(navHostController: NavHostController) {
+    val viewModel : JobViewModel = viewModel()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
-    val JobViewModel: jobViewModel = viewModel()
 
 
     var title by remember { mutableStateOf("") }
@@ -54,13 +62,16 @@ fun JobForm(navHostController: NavHostController) {
     var date by remember { mutableStateOf("") }
 
 
-    val context = LocalContext.current
-    val pickImage = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+    // Image picker
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
         imageUri = uri
     }
 
-    // Fetch user data
+
+
+
 
 
     Column (
@@ -87,10 +98,28 @@ fun JobForm(navHostController: NavHostController) {
 
 
 
-        Button(onClick = {
-           pickImage.launch("image/*")
-        }) {
-            Text("Select Image")
+        // Image Picker
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .clickable { launcher.launch("image/*") }
+                .background(Color.LightGray),
+            contentAlignment = Alignment.Center
+        ) {
+            if (imageUri != null) {
+                Image(
+                    painter = rememberAsyncImagePainter(imageUri),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Text("Tap to select image")
+            }
         }
 
         Spacer(modifier = Modifier.padding(20.dp))
@@ -185,11 +214,35 @@ fun JobForm(navHostController: NavHostController) {
             modifier = Modifier.width(250.dp),
             onClick = {
 
-                    val formData = imageUri?.toString()
-                        ?.let { jobdetailsmodel(title,call,address,description, imageUrl = null) }
-                    JobViewModel.submitForm(formData!!)
-                    Toast.makeText(context,"Data Successfully added",Toast.LENGTH_SHORT).show()
-                    navHostController.navigate(Routes.LabourJobScreen)
+                if (title.isNotBlank() && address.isNotBlank() && date.isNotBlank()
+                    && age.isNotBlank() && call.isNotBlank()
+                ) {
+                    val job = jobdetailsmodel(
+                        title = title,
+                        age = age,
+                        call = call,
+                        address = address,
+                        Salary = salary,
+                        description = description,
+                        date = date,
+
+
+                        )
+
+                    viewModel.addJob (job, imageUri,
+                        onSuccess = {
+                            Toast.makeText(context, "Doctor added successfully", Toast.LENGTH_SHORT).show()
+                            navHostController.popBackStack()
+                        },
+                        onError = {
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                } else {
+                    Toast.makeText(context, "Please fill all fields and select image", Toast.LENGTH_SHORT).show()
+                }
+
+
 
             },
             shape = RoundedCornerShape(10.dp),

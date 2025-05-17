@@ -42,7 +42,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import com.example.serviceapp.LanourJob.JobViewModel.JobViewModel
+
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
@@ -51,7 +52,7 @@ import com.example.serviceapp.navigation.Routes
 @Composable
 fun JobForm() {
 
-    val JobViewModel: jobViewModel = viewModel()
+    val JobViewModel: JobViewModel = viewModel()
 
 
     var title by remember { mutableStateOf("") }

@@ -80,7 +80,8 @@ import com.example.serviceapp.Equipment.Category
 import com.example.serviceapp.Equipment.ItemsPopular
 import com.example.serviceapp.Equipment.Model.EquipmentModel
 import com.example.serviceapp.LanourJob.JobList
-import com.example.serviceapp.LanourJob.JobViewModel.jobViewModel
+import com.example.serviceapp.LanourJob.JobViewModel.JobViewModel
+
 import com.example.serviceapp.LanourJob.Model.JobModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
@@ -97,11 +98,11 @@ fun HomeScreen(navHostController: NavHostController){
     var selectedItem by remember { mutableIntStateOf(0) }
     val shouldShowBottomBar = remember { mutableStateOf(true) }
 
-    val JobViewmodel : jobViewModel = viewModel()
-    val formDataList = JobViewmodel.formDataList
+    val JobViewmodel : JobViewModel = viewModel()
+    val formDataList = JobViewmodel.jobList
 
     LaunchedEffect(true) {
-        JobViewmodel.getFormData()
+        JobViewmodel.fetchJobs()
     }
 
     val BottomNavItem = listOf(

@@ -3,6 +3,7 @@ package com.example.serviceapp.LanourJob.Model
 import android.net.Uri
 
 data class jobdetailsmodel(
+    var id: String = "",
     var title: String = "",
     var call: String = "",
     var address: String = "",
