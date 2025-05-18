@@ -1,6 +1,7 @@
 package com.example.serviceapp.LanourJob.Model
 
 import android.net.Uri
+import java.io.Serializable
 
 data class jobdetailsmodel(
     var id: String = "",
@@ -12,4 +13,4 @@ data class jobdetailsmodel(
     var description: String = "",
     var imageUrl: String? = null,
     var date: String = ""
-)
+) : Serializable

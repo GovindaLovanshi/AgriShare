@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".LanourJob.JobDetailsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.ServiceApp" />
         <receiver android:name=".Notification.JobReceiver"
             android:enabled="true"
             android:exported="false"/>

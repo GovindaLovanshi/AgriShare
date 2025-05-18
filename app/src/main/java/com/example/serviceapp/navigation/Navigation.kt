@@ -75,10 +75,7 @@ fun Navigation(){
 
 
 
-        composable<Routes.JobDetailsScreen> {
 
-            JobDetailsScreen(navController)
-        }
 
         composable<Routes.SettingScreen> {
 

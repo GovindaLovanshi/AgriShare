@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -55,17 +56,35 @@ import com.example.serviceapp.LanourJob.Model.JobModel
 import com.example.serviceapp.LanourJob.Model.jobdetailsmodel
 import com.example.serviceapp.R
 import com.example.serviceapp.navigation.Routes
+import com.example.serviceapp.ui.theme.ServiceAppTheme
 
+
+class JobDetailsActivity : ComponentActivity() {
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val job = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("jobs", jobdetailsmodel::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra("doctor") as? jobdetailsmodel
+        }
+        setContent {
+            job?.let {
+                JobDetailsScreen(JobModel = it)
+            }
+        }
+    }
+}
 
 @Composable
-fun JobDetailsScreen(navHostController: NavHostController ){
-    val JobViewmodel : JobViewModel = viewModel()
-    val datalist = JobViewmodel.jobList
+fun JobDetailsScreen(JobModel : jobdetailsmodel){
 
 
-    LaunchedEffect(true) {
-        JobViewmodel.fetchJobs()
-    }
+
     Scaffold(
         topBar = {
             TopBarJob()
@@ -76,49 +95,32 @@ fun JobDetailsScreen(navHostController: NavHostController ){
 
     ) {padding ->
 
-        LazyColumn (modifier = Modifier.padding(padding)){
+        val context = LocalContext.current
 
-            items(datalist) { data->
-                JObDetails(data )
+
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+
+            Row (modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically){
+                AsyncImage(
+                    model = JobModel.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+
+                Text(
+                    text = JobModel.title,
+                    modifier = Modifier.padding(start = 20.dp),
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+
 
             }
-        }
-    }
-}
-
-
-@Composable
-fun JObDetails(
-    JobModel: jobdetailsmodel,
-
-){
-
-    val context = LocalContext.current
-
-
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-
-        Row (modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically){
-            AsyncImage(
-                model = JobModel.imageUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-
-            Text(
-                text = JobModel.title,
-                modifier = Modifier.padding(start = 20.dp),
-                color = Color.Black,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1
-            )
-
-
-        }
 
 
 
@@ -205,10 +207,9 @@ fun JObDetails(
                 fontWeight = FontWeight.Bold,
 
 
-            )
+                )
         }
-
-
-
-
     }
+}
+
+

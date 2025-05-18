@@ -145,7 +145,12 @@ fun LabourJobScreen(navHostController: NavHostController){
                 items(formDataList) { job ->
                     JobList(
                         JobModel = job,
-                        onClick = {})
+                        onClick = {
+
+                            val intent = Intent(context, JobDetailsActivity::class.java)
+                            intent.putExtra("job", job)
+                            context.startActivity(intent)
+                        })
                 }
             }
         }
@@ -167,8 +172,7 @@ fun JobList(
     Row (
         modifier = Modifier.padding(8.dp).clickable {
 
-
-
+            onClick()
 
         }, verticalAlignment = Alignment.CenterVertically
     ){

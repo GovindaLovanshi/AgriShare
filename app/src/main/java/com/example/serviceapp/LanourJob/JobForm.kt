@@ -231,7 +231,7 @@ fun JobForm(navHostController: NavHostController) {
 
                     viewModel.addJob (job, imageUri,
                         onSuccess = {
-                            Toast.makeText(context, "Doctor added successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "job added successfully", Toast.LENGTH_SHORT).show()
                             navHostController.popBackStack()
                         },
                         onError = {
